@@ -7,7 +7,7 @@ let chartCost = null;
 let chartUtil = null;
 let chartLoad = null;
 
-// --- КАСТОМНЫЙ ПЛАГИН ДЛЯ ПОДПИСЕЙ ДАННЫХ ---
+// --- ОБНОВЛЕННЫЙ ПЛАГИН ДЛЯ ВЕРТИКАЛЬНЫХ ПОДПИСЕЙ ДАННЫХ ---
 const customDatalabels = {
     id: 'customDatalabels',
     afterDatasetsDraw(chart) {
@@ -16,35 +16,40 @@ const customDatalabels = {
         
         chart.data.datasets.forEach((dataset, datasetIndex) => {
             const meta = chart.getDatasetMeta(datasetIndex);
-            if (meta.hidden) return; // Пропускаем, если датасет скрыт
+            if (meta.hidden) return; 
             
             meta.data.forEach((bar, index) => {
                 const val = dataset.data[index];
                 if (val === null || val === undefined) return;
                 
-                // Форматируем число: если целое — оставляем как есть, если дробное — до 2 знаков
                 let text = val % 1 === 0 ? val : Number(val).toFixed(2);
                 
-                // Автоматически добавляем % для нужных графиков
                 if (chart.canvas.id === 'utilizationChart' || chart.canvas.id === 'loadChart') {
                     text += '%';
                 }
                 
-                ctx.fillStyle = '#94a3b8'; // Цвет текста подписей (светло-серый)
-                ctx.font = 'bold 10px Segoe UI';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
+                ctx.fillStyle = '#94a3b8'; 
+                ctx.font = 'bold 9px Segoe UI'; // Чуть уменьшили шрифт для идеального отображения на смартфонах
                 
-                // Рисуем текст чуть выше верхней границы столбика (bar.y - 4px)
-                // Для кластерных графиков bar.x автоматически смещается на центр нужного столбика
-                ctx.fillText(text, bar.x, bar.y - 4);
+                ctx.save();
+                // Смещаем центр рисования к вершине конкретного столбика
+                ctx.translate(bar.x, bar.y - 6);
+                // Поворачиваем контекст на -90 градусов (вертикально вверх)
+                ctx.rotate(-Math.PI / 2);
+                
+                // Выравнивание: текст растет от точки поворота вверх, центрируясь по ширине столбика
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                
+                ctx.fillText(text, 0, 0);
+                ctx.restore();
             });
         });
         ctx.restore();
     }
 };
 
-// Глобально регистрируем наш плагин подписей в Chart.js
+// Регистрация плагина
 Chart.register(customDatalabels);
 
 // Настройки темной темы
@@ -63,7 +68,7 @@ const darkChartOptions = {
             beginAtZero: true, 
             ticks: { color: '#94a3b8' }, 
             grid: { color: '#1e293b' },
-            grace: '10%' // Добавляет 10% свободного места сверху шкалы, чтобы подписи не вылетали за границы графика
+            grace: '25%' // <--- Увеличили запас сверху до 25%, чтобы вертикальный текст полностью помещался
         }
     }
 };
