@@ -7,7 +7,7 @@ let chartCost = null;
 let chartUtil = null;
 let chartLoad = null;
 
-// --- ОБНОВЛЕННЫЙ ПЛАГИН ДЛЯ ВЕРТИКАЛЬНЫХ ПОДПИСЕЙ ДАННЫХ ---
+// --- ОБНОВЛЕННЫЙ ПЛАГИН ДЛЯ ГОРИЗОНТАЛЬНЫХ ПОДПИСЕЙ ---
 const customDatalabels = {
     id: 'customDatalabels',
     afterDatasetsDraw(chart) {
@@ -29,20 +29,12 @@ const customDatalabels = {
                 }
                 
                 ctx.fillStyle = '#94a3b8'; 
-                ctx.font = 'bold 9px Segoe UI'; // Чуть уменьшили шрифт для идеального отображения на смартфонах
+                ctx.font = 'bold 10px Segoe UI'; // Аккуратный компактный шрифт
+                ctx.textAlign = 'center';        // Выравнивание по центру столбика
+                ctx.textBaseline = 'bottom';     // Текст над столбиком
                 
-                ctx.save();
-                // Смещаем центр рисования к вершине конкретного столбика
-                ctx.translate(bar.x, bar.y - 6);
-                // Поворачиваем контекст на -90 градусов (вертикально вверх)
-                ctx.rotate(-Math.PI / 2);
-                
-                // Выравнивание: текст растет от точки поворота вверх, центрируясь по ширине столбика
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'middle';
-                
-                ctx.fillText(text, 0, 0);
-                ctx.restore();
+                // Рисуем подпись прямо над столбиком
+                ctx.fillText(text, bar.x, bar.y - 4);
             });
         });
         ctx.restore();
@@ -68,7 +60,7 @@ const darkChartOptions = {
             beginAtZero: true, 
             ticks: { color: '#94a3b8' }, 
             grid: { color: '#1e293b' },
-            grace: '25%' // <--- Увеличили запас сверху до 25%, чтобы вертикальный текст полностью помещался
+            grace: '15%' // Снизили запас сверху до 15% (для горизонтального текста этого с головой)
         }
     }
 };
