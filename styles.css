@@ -1,0 +1,179 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+body { 
+    background-color: #0b0f19; 
+    color: #e2e8f0; 
+    padding: 20px; 
+    height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+/* Сделали дашборд уже на ПК (850px вместо 1200px) */
+.tabs-container, .dashboard-layout, #status {
+    width: 100%;
+    max-width: 850px; 
+}
+
+/* Шапка дашборда */
+.tabs-container { 
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px; 
+    margin-bottom: 15px; 
+    border-bottom: 2px solid #1e293b; 
+    padding-bottom: 10px; 
+}
+
+.tabs-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* Кнопки вкладок */
+.tab { 
+    padding: 8px 20px; 
+    font-size: 13px; 
+    font-weight: bold; 
+    color: #94a3b8;
+    border: 1px solid #232a3b; 
+    background: #141b2d; 
+    border-radius: 6px;
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+}
+.tab:hover { 
+    background: #1e293b; 
+    color: #fff;
+}
+.tab.active { 
+    background: #141b2d; 
+    color: #00bcff; 
+    border-color: #00bcff;
+    box-shadow: 0 0 10px rgba(0, 188, 255, 0.2);
+}
+
+/* Выпадающий список дат */
+.date-select {
+    width: 160px; 
+    padding: 8px 30px 8px 12px; 
+    background-color: #192239;
+    border: 1px solid #232a3b;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300bcff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+.date-select:hover, .date-select:focus {
+    border-color: #00bcff;
+    box-shadow: 0 0 10px rgba(0, 188, 255, 0.25);
+    color: #fff;
+}
+.date-select option {
+    background-color: #141b2d;
+    color: #e2e8f0;
+    padding: 10px;
+}
+
+/* Контейнер графиков */
+.dashboard-layout { 
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1; 
+    min-height: 0; 
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Карточки графиков */
+.chart-wrapper { 
+    background: #141b2d; 
+    padding: 15px; 
+    border-radius: 8px; 
+    border: 1px solid #1e293b; 
+    height: 220px; 
+    display: flex; 
+    flex-direction: column; 
+    width: 100%;
+}
+.chart-wrapper h3 { 
+    text-align: center; 
+    margin-bottom: 8px; 
+    font-size: 13px; 
+    color: #00bcff; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+canvas { flex-grow: 1; }
+
+#status { font-weight: bold; color: #00bcff; margin-bottom: 10px; font-size: 13px; }
+
+.dashboard-layout::-webkit-scrollbar { width: 6px; }
+.dashboard-layout::-webkit-scrollbar-track { background: #0b0f19; }
+.dashboard-layout::-webkit-scrollbar-thumb { background: #232a3b; border-radius: 3px; }
+.dashboard-layout::-webkit-scrollbar-thumb:hover { background: #00bcff; }
+
+
+/* ==========================================================================
+   АДАПТИВНОСТЬ ДЛЯ СМАРТФОНОВ (Экраны до 600px)
+   ========================================================================== */
+@media (max-width: 600px) {
+    body { 
+        padding: 10px; /* Уменьшаем отступы от краев экрана телефона */
+    }
+
+    /* Перестраиваем шапку в колонку */
+    .tabs-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding-bottom: 12px;
+    }
+
+    /* Растягиваем блок вкладок на всю ширину */
+    .tabs-group {
+        width: 100%;
+    }
+
+    /* Кнопки "Місто", "Регіон", "ММ" делят экран поровну */
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: 10px 5px;
+        font-size: 12px;
+    }
+
+    /* Селектор даты становится крупным и на всю ширину для удобного тапа */
+    .date-select {
+        width: 100%;
+        padding: 10px 12px;
+        background-position: right 12px center;
+        font-size: 14px;
+    }
+
+    /* Чуть уменьшаем высоту карточек графиков, чтобы они экономнее занимали экран */
+    .chart-wrapper {
+        height: 200px;
+        padding: 10px;
+    }
+
+    .chart-wrapper h3 {
+        font-size: 11px;
+        margin-bottom: 5px;
+    }
+}
